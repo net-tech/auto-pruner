@@ -1,7 +1,7 @@
 {
   "name": "auto-pruner",
   "author": "net-tech-",
-  "description": "AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval."
+  "description": "AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval.",
   "version": "2.0.0",
   "private": true,
   "type": "module",
