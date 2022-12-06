@@ -1,0 +1,31 @@
+{
+	"name": "template-bot",
+	"version": "0.0.0",
+	"main": "src/index.ts",
+	"scripts": {
+		"build": "rm -rf ./js/* && eslint . --ext .ts --fix && tsc && echo 'Build Successful'",
+		"dev": "ts-node ./src/index.ts",
+		"deploy": "ts-node ./src/deploy-commands"
+	},
+	"license": "private",
+	"private": true,
+	"dependencies": {
+		"@sapphire/stopwatch": "^1.5.0",
+		"@sapphire/time-utilities": "^1.7.8",
+		"@types/node": "^18.11.10",
+		"@types/uuid": "^9.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"colorette": "^2.0.19",
+		"discord.js": "^14.7.1",
+		"dotenv": "^16.0.3",
+		"eslint": "^8.29.0",
+		"pino": "^8.7.0",
+		"pino-pretty": "^9.1.1",
+		"typescript": "^4.9.3",
+		"uuid": "^9.0.0"
+	},
+	"devDependencies": {
+		"eslint-plugin-security": "^1.5.0"
+	}
+}
