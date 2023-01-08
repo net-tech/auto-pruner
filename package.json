@@ -1,44 +1,39 @@
 {
-  "name": "auto-pruner",
-  "author": "net-tech-",
-  "description": "AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval.",
-  "version": "2.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "typecheck": "tsc --noEmit",
-    "start": "bun run ./src/index.ts",
-    "db:generate": "prisma generate",
-    "deploy": "bun run ./src/util/deploy.ts",
-    "format": "biome format . --write",
-    "lint": "biome check . --apply",
-    "lint:unsafe": "biome check . --apply-unsafe",
-    "pretty": "biome format . --write && biome check . --apply"
-  },
-  "dependencies": {
-    "@biomejs/biome": "^1.3.3",
-    "@discordjs/core": "^1.0.1",
-    "@prisma/client": "^5.5.2",
-    "croner": "^7.0.2",
-    "discord.js": "^14.13.0",
-    "human-interval": "^2.0.1",
-    "ms": "^2.1.3",
-    "nanoid": "^5.0.1",
-    "pino": "^8.15.7",
-    "pino-pretty": "^10.2.3",
-    "zlib-sync": "^0.1.8"
-  },
-  "devDependencies": {
-    "@types/ms": "^0.7.32",
-    "@types/node": "^20.8.10",
-    "bun-types": "latest",
-    "typescript": "^5.0.4"
-  },
-  "module": "index.ts"
-}
-
-    "prisma": "^5.5.2",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
-  }
+	"name": "auto-pruner",
+	"author": "net-tech-",
+	"description": "AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval.",
+	"version": "2.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"typecheck": "tsc --noEmit",
+		"start": "bun run ./src/index.ts",
+		"db:generate": "prisma generate",
+		"deploy": "bun run ./src/util/deploy.ts",
+		"format": "biome format . --write",
+		"lint": "biome check . --apply",
+		"lint:unsafe": "biome check . --apply-unsafe",
+		"pretty": "biome format . --write && biome check . --apply"
+	},
+	"dependencies": {
+		"@biomejs/biome": "^1.3.3",
+		"@discordjs/core": "^1.0.1",
+		"@prisma/client": "^5.5.2",
+		"croner": "^7.0.2",
+		"discord.js": "^14.13.0",
+		"human-interval": "^2.0.1",
+		"ms": "^2.1.3",
+		"nanoid": "^5.0.1",
+		"pino": "^8.15.7",
+		"pino-pretty": "^10.2.3",
+		"zlib-sync": "^0.1.8"
+	},
+	"devDependencies": {
+		"@types/ms": "^0.7.32",
+		"@types/node": "^20.8.10",
+		"bun-types": "latest",
+		"prisma": "^5.5.2",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.2.2"
+	}
 }
