@@ -26,6 +26,6 @@
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
-		"eslint-plugin-security": "^1.5.0"
+		"eslint-plugin-security": "^1.6.0"
 	}
 }
