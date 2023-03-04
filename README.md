@@ -1,3 +1,6 @@
-# Template Bot
+This repository is part of our Buape Accelerate program, a program designed to provide developers with the resources and mentorship they need to rapidly advance their projects and succeed in their careers.
+Learn more by <a href="https://go.buape.com/accelerate">clicking here</a>!
 
-A template for creating a bot using the [Discord.js](https://discord.js.org) library. This template includes a basic command handler, event handler, a ping commands, environment checking, and a example env.
+<hr />
+
+# Auto-pruner
