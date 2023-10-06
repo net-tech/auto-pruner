@@ -1,6 +1,15 @@
-This repository is part of our Buape Accelerate program, a program designed to provide developers with the resources and mentorship they need to rapidly advance their projects and succeed in their careers.
-Learn more by <a href="https://go.buape.com/accelerate">clicking here</a>!
+# auto-pruner
 
-<hr />
+To install dependencies:
 
-# Auto-pruner
+```bash
+bun install
+```
+
+To run:
+
+```bash
+bun run index.ts
+```
+
+This project was created using `bun init` in bun v1.0.4. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

@@ -1,31 +1,25 @@
 {
-	"name": "template-bot",
-	"version": "0.0.0",
-	"main": "src/index.ts",
-	"scripts": {
-		"build": "rm -rf ./js/* && eslint . --ext .ts --fix && tsc && echo 'Build Successful'",
-		"dev": "ts-node ./src/index.ts",
-		"deploy": "ts-node ./src/deploy-commands"
-	},
-	"license": "private",
-	"private": true,
-	"dependencies": {
-		"@sapphire/stopwatch": "^1.5.0",
-		"@sapphire/time-utilities": "^1.7.8",
-		"@types/node": "^18.13.0",
-		"@types/uuid": "^9.0.1",
-		"@typescript-eslint/eslint-plugin": "^5.52.0",
-		"@typescript-eslint/parser": "^5.52.0",
-		"colorette": "^2.0.19",
-		"discord.js": "^14.7.1",
-		"dotenv": "^16.0.3",
-		"eslint": "^8.34.0",
-		"pino": "^8.10.0",
-		"pino-pretty": "^9.2.0",
-		"typescript": "^5.0.0",
-		"uuid": "^9.0.0"
-	},
-	"devDependencies": {
-		"eslint-plugin-security": "^1.7.1"
-	}
+  "name": "auto-pruner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "start:dev": "bun ./src/index.ts",
+    "pretty": "biome format . --write",
+    "lint": "biome check . --apply",
+    "lint:unsafe": "biome check . --apply-unsafe"
+  },
+  "dependencies": {
+    "@discordjs/core": "^0.6.0",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.2.2",
+    "@types/node": "^18.15.3",
+    "bun-types": "latest",
+    "typescript": "^5.0.4"
+  },
+  "module": "index.ts"
 }

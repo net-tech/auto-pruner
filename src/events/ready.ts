@@ -1,17 +1,10 @@
-import { bgMagentaBright } from "colorette"
-import { Client } from "discord.js"
-import boot from "../services/boot"
-import { log } from "../services/logger"
+import { Events } from "discord.js"
+import type { Event } from "./index.js"
 
-module.exports = {
-	name: "ready",
+export default {
+	name: Events.ClientReady,
 	once: true,
-	execute(client: Client) {
-
-		const environment = boot.environment()
-
-		log.info(
-			`Client ready with ${client.users.cache.size} users across ${client.guilds.cache.size} guilds in ${bgMagentaBright(environment)} mode.`
-		)
-	},
-}
+	async execute(client) {
+		console.log(`Ready! Logged in as ${client.user.tag}`)
+	}
+} satisfies Event<"ready">
