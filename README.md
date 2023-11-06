@@ -3,6 +3,11 @@ AutoPruner is a simple Discord bot that allows you to prune members on a customi
 
 ---
 
+AutoPruner is meant to be run with [Bun](https://bun.sh), not Node.js. As of November 6th 2023, Bun does not work on Windows but will work on Mac and Linux. Check their website for the latest information on Windows support.
+
+Prerequisite:
+- Install [Bun](https://bun.sh) on your machine.
+
 To install dependencies:
 
 ```bash
