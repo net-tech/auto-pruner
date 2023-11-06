@@ -29,6 +29,7 @@ export const predicate: StructurePredicate<Event> = (
 ): structure is Event =>
 	Boolean(structure) &&
 	typeof structure === "object" &&
+	// biome-ignore lint/style/noNonNullAssertion: predicate
 	"name" in structure! &&
 	"execute" in structure &&
 	typeof structure.name === "string" &&
