@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id            String    @unique
+  enabled       Boolean   @default(false)
+  interval      DateTime?
+  intervalHuman String?
+  days          Int       @default(30)
+  roles         Role[]
+  logChannelId  String?
+  lastPrune     DateTime?
+
+  @@index([id])
+}
+
+model Role {
+  id      String @unique
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String
+
+  @@index([id])
+}

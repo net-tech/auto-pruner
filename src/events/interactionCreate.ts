@@ -1,6 +1,6 @@
 import { Interaction } from "discord.js"
-import { log } from "../services/logger"
 import { v4 as uuidv4 } from "uuid"
+import { log } from "../services/logger"
 module.exports = {
 	name: "interactionCreate",
 	once: false,
@@ -12,36 +12,35 @@ module.exports = {
 		if (!command) return
 
 		try {
-			await command.execute(interaction)
-				.catch((error: unknown) => {
-					const errorId = uuidv4()
-					log.error(error, errorId)
-					interaction.deferred
-						? interaction.editReply({
+			await command.execute(interaction).catch((error: unknown) => {
+				const errorId = uuidv4()
+				log.error(error, errorId)
+				interaction.deferred
+					? interaction.editReply({
 							content: `There was an error while executing this command. Error ID: ${errorId}`,
 							embeds: [],
 							files: []
-						})
-						: interaction.reply({
+					  })
+					: interaction.reply({
 							content: `There was an error while executing this command. Error ID: ${errorId}`,
 							embeds: [],
 							files: []
-						})
-				})
+					  })
+			})
 		} catch (error) {
 			const errorId = uuidv4()
 			log.error(error, errorId)
 			interaction.deferred
 				? interaction.editReply({
-					content: `There was an error while executing this command. Error ID: ${errorId}`,
-					embeds: [],
-					files: []
-				})
+						content: `There was an error while executing this command. Error ID: ${errorId}`,
+						embeds: [],
+						files: []
+				  })
 				: interaction.reply({
-					content: `There was an error while executing this command. Error ID: ${errorId}`,
-					embeds: [],
-					files: []
-				})
+						content: `There was an error while executing this command. Error ID: ${errorId}`,
+						embeds: [],
+						files: []
+				  })
 		}
-	},
+	}
 }

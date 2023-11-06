@@ -1,61 +1,41 @@
-import { Client, Collection, GatewayIntentBits } from "discord.js"
-import fs from "node:fs"
-import path from "node:path"
-import * as dotenv from "dotenv"
-import boot from "./services/boot"
-dotenv.config()
+import { URL } from "node:url"
+import { Client, GatewayIntentBits, Options } from "discord.js"
+import { loadCommands, loadEvents } from "./util/loaders.js"
+import { registerEvents } from "./util/registerEvents.js"
 
-export const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.GuildMessages
-	],
+// Initialize the client
+const client = new Client({
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+	makeCache: Options.cacheWithLimits({
+		AutoModerationRuleManager: 0,
+		UserManager: 10, // "... needs to have 10 or so for safety" - discord js people
+		PresenceManager: 0,
+		VoiceStateManager: 0,
+		ThreadMemberManager: 0,
+		StageInstanceManager: 0,
+		ReactionUserManager: 0,
+		MessageManager: 0,
+		GuildMemberManager: 0,
+		ReactionManager: 0,
+		GuildBanManager: 0,
+		GuildEmojiManager: 0,
+		GuildInviteManager: 0,
+		GuildScheduledEventManager: 0,
+		GuildStickerManager: 0,
+		BaseGuildEmojiManager: 0
+	}),
+	allowedMentions: {
+		parse: ["users"],
+		repliedUser: true
+	}
 })
 
-boot.init()
+// Load the events and commands
+const events = await loadEvents(new URL("events/", import.meta.url))
+const commands = await loadCommands(new URL("commands/", import.meta.url))
 
-/* Command Handling */
+// Register the event handlers
+registerEvents(commands, events, client)
 
-client.commands = new Collection()
-
-const commandsPath = path.join(__dirname, "commands")
-// eslint-disable-next-line security/detect-non-literal-fs-filename
-const commandFiles = fs
-	.readdirSync(commandsPath)
-	.filter((file) => file.endsWith(".ts"))
-
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file)
-	// eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-	const command = require(filePath)
-	client.commands.set(command.data?.name, command)
-}
-
-/* Event Handling */
-
-const eventsPath = path.join(__dirname, "events")
-// eslint-disable-next-line security/detect-non-literal-fs-filename
-const eventFiles = fs
-	.readdirSync(eventsPath)
-	.filter((file) => file.endsWith(".ts"))
-
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file)
-	// eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-	const event = require(filePath)
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args))
-	} else {
-		client.on(event.name, (...args) => event.execute(...args))
-	}
-}
-
-declare module "discord.js" {
-	export interface Client {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		commands: Collection<unknown, any>
-	}
-}
-
-client.login(process.env.DISCORD_TOKEN)
+// Login to the client
+client.login(Bun.env.DISCORD_TOKEN)

@@ -1,6 +1,16 @@
-This repository is part of our Buape Accelerate program, a program designed to provide developers with the resources and mentorship they need to rapidly advance their projects and succeed in their careers.
-Learn more by <a href="https://go.buape.com/accelerate">clicking here</a>!
+# AutoPruner
+AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval. A hosted version of AutoPruner can be invited [here](https://discord.com/api/oauth2/authorize?client_id=1049762823997231134&permissions=274878286850&scope=applications.commands%20bot). The support server is located [here](https://discord.com/invite/wAhhesqCAH).
 
-<hr />
+---
 
-# Auto-pruner
+To install dependencies:
+
+```bash
+bun install
+```
+
+To run:
+
+```bash
+bun run start
+```
