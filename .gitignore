@@ -62,6 +62,7 @@ web_modules/
 # TypeScript cache
 
 \*.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # Optional npm cache directory
 
@@ -173,4 +174,3 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
-
