@@ -1,4 +1,3 @@
-// ! I've experienced issue running this with Bun, and with a few hours of debugging resulting in the issue not being fixed, I gave up.
 import { URL } from "node:url"
 import { API } from "@discordjs/core"
 import { REST } from "discord.js"
