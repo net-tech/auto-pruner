@@ -1,6 +1,6 @@
 import { Cron } from "croner"
 import { type Client, DiscordAPIError } from "discord.js"
-import { getGuildData, updateGuildLastPrune } from "../util/database.js"
+import { prisma, updateGuildLastPrune } from "../util/database.js"
 import { logger } from "../util/logger.js"
 import {
 	postPruneLogErrorMessage,
@@ -9,52 +9,69 @@ import {
 
 const pruneJob = async (client: Client) => {
 	logger.info("[CRON] Starting prune job...")
-	const guilds = client.guilds.cache
-	for (const guild of guilds.values()) {
-		const guildSettings = await getGuildData(guild.id)
-		if (!guildSettings) {
-			logger.error(`Guild ${guild.id} not found in database.`)
-			continue
-		}
-		if (!guildSettings.enabled) continue
-		if (!guildSettings.interval) continue
-		if (!guildSettings.days) continue
 
-		if (guildSettings.lastPrune) {
-			const lastPrune = new Date(guildSettings.lastPrune)
+	const guilds = await prisma.guild.findMany({
+		where: {
+			enabled: true,
+			days: {
+				gte: 1,
+				lte: 30
+			},
+			interval: {
+				not: null,
+				gte: new Date(86_400_000),
+				lt: new Date(365 * 10 * 86_400_000)
+			}
+		},
+		include: {
+			roles: true
+		}
+	})
+
+	for (const guildSetting of guilds) {
+		if (guildSetting.lastPrune && guildSetting.interval) {
+			const lastPrune = new Date(guildSetting.lastPrune)
 			// Minus 5 seconds just to not have false positives.
 			if (
-				lastPrune.getTime() + guildSettings.interval.getTime() >
+				lastPrune.getTime() + guildSetting.interval?.getTime() >
 				Date.now() - 5000
 			) {
 				logger.info(
-					`Skipping prune for guild ${guild.id} because it was pruned recently.`
+					`Skipping prune for guild ${guildSetting.id} because it was pruned recently.`
 				)
 				continue
 			}
 		}
 
-		await guild.members
+		const clientGuild = client.guilds.cache.get(guildSetting.id)
+		if (!clientGuild) {
+			logger.warn(
+				`Skipping prune for guild ${guildSetting.id} because I am not in it.`
+			)
+			continue
+		}
+
+		await clientGuild.members
 			.prune({
-				days: guildSettings.days,
-				count: guild.memberCount > 10_000 ? false : true,
-				roles: guildSettings.roles.map((role) => role.id),
+				days: guildSetting.days,
+				count: clientGuild.memberCount > 10_000 ? false : true,
+				roles: guildSetting.roles.map((role) => role.id),
 				reason: "Scheduled guild prune"
 			})
 			.then((pruned: number | undefined | null) => {
-				updateGuildLastPrune(guild.id, new Date())
+				updateGuildLastPrune(guildSetting.id, new Date())
 
-				if (guildSettings.logChannelId) {
-					postPruneLogSuccessMessage(guild, guildSettings.logChannelId, {
-						guildId: guild.id,
+				if (guildSetting.logChannelId) {
+					postPruneLogSuccessMessage(clientGuild, guildSetting.logChannelId, {
+						guildId: guildSetting.id,
 						pruneCount: pruned ?? undefined,
-						roles: guildSettings.roles.map((role) => role.id),
-						days: guildSettings.days,
+						roles: guildSetting.roles.map((role) => role.id),
+						days: guildSetting.days,
 						date: new Date()
 					}).catch((error) => {
 						if (error.error && error.code === 50001) {
 							logger.warn(
-								`Skipping prune log for guild ${guild.id} because I do not have access to the log channel.`
+								`Skipping prune log for guild ${guildSetting.id} because I do not have access to the log channel.`
 							)
 						}
 						logger.error(error, "Error sending prune log message")
@@ -64,23 +81,23 @@ const pruneJob = async (client: Client) => {
 			.catch((error) => {
 				logger.error(error, "Error pruning guild")
 				if (error instanceof DiscordAPIError) {
-					if (guildSettings.logChannelId) {
+					if (guildSetting.logChannelId) {
 						if (error.code === 50013) {
 							postPruneLogErrorMessage(
-								guild,
-								guildSettings.logChannelId,
+								clientGuild,
+								guildSetting.logChannelId,
 								"I do not have permission to prune members in this guild. Please check that I have the 'Kick Members' permission."
 							)
 							return
 						}
 						postPruneLogErrorMessage(
-							guild,
-							guildSettings.logChannelId,
+							clientGuild,
+							guildSetting.logChannelId,
 							`Discord API Error ${error.code}: ${error.message}`
 						).catch((error) => {
 							if (error.error && error.code === 50001) {
 								logger.warn(
-									`Skipping prune log for guild ${guild.id} because I do not have access to the log channel.`
+									`Skipping prune log for guild ${guildSetting.id} because I do not have access to the log channel.`
 								)
 							}
 							logger.error(error, "Error sending prune log message")
