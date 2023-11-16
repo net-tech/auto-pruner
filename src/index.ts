@@ -22,7 +22,8 @@ const client = new Client({
 		GuildInviteManager: 0,
 		GuildScheduledEventManager: 0,
 		GuildStickerManager: 0,
-		BaseGuildEmojiManager: 0
+		BaseGuildEmojiManager: 0,
+		DMMessageManager: 0
 	}),
 	allowedMentions: {
 		parse: ["users"],
