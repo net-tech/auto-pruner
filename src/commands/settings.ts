@@ -169,7 +169,7 @@ export default {
 			return
 		})
 
-		const guildData = await getGuildData(interaction.guild.id)
+		const guildData = await getGuildData(interaction.guild.id, true)
 
 		const settingsEmbed = new EmbedBuilder()
 			.setTitle("Server Settings")
