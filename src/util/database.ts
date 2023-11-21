@@ -10,9 +10,7 @@ export const prisma = new PrismaClient({
  * @param select - The fields to select from the database. If true, all fields will be selected, including the `roles` field. If false, roles will still be selected.
  * @returns The data for the guild
  */
-export const getGuildData = async (
-	guildId: string,
-) => {
+export const getGuildData = async (guildId: string) => {
 	const guildData = await prisma.guild.upsert({
 		where: {
 			id: guildId
