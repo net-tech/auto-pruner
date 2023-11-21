@@ -12,7 +12,6 @@ export const prisma = new PrismaClient({
  */
 export const getGuildData = async (
 	guildId: string,
-	select: Prisma.GuildSelect | true
 ) => {
 	const guildData = await prisma.guild.upsert({
 		where: {
@@ -22,14 +21,9 @@ export const getGuildData = async (
 		create: {
 			id: guildId
 		},
-		select: select
-			? {
-					roles: true
-			  }
-			: {
-					roles: true,
-					...(select as Prisma.GuildSelect)
-			  }
+		include: {
+			roles: true
+		}
 	})
 	return guildData
 }
