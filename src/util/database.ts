@@ -7,11 +7,10 @@ export const prisma = new PrismaClient({
 /**
  * Fetch data for a specific guild. If the guild doesn't exist in the database, a new record is created with the provided guildId.
  * @param guildId - The ID of the guild to fetch data for
- * @param select - The fields to select from the database. If true, all fields will be selected, including the `roles` field. If false, roles will still be selected.
  * @returns The data for the guild
  */
 export const getGuildData = async (guildId: string) => {
-	const guildData = await prisma.guild.upsert({
+	return prisma.guild.upsert({
 		where: {
 			id: guildId
 		},
@@ -22,8 +21,7 @@ export const getGuildData = async (guildId: string) => {
 		include: {
 			roles: true
 		}
-	})
-	return guildData
+	});
 }
 
 /**
@@ -56,11 +54,11 @@ export const updateGuildSettings = async (
 		roles: undefined
 	}
 
-	return await prisma.guild.upsert({
-		where: { id: guildId },
+	return prisma.guild.upsert({
+		where: {id: guildId},
 		update: upsertSettings,
-		create: { ...upsertSettings }
-	})
+		create: {...upsertSettings}
+	});
 }
 
 /**
@@ -69,9 +67,9 @@ export const updateGuildSettings = async (
  * @param guildId - The ID of the guild for which roles should be reset.
  */
 const resetRolesForGuild = async (guildId: string) => {
-	return await prisma.role.deleteMany({
-		where: { guild: { id: guildId } }
-	})
+	return prisma.role.deleteMany({
+		where: {guild: {id: guildId}}
+	});
 }
 
 /**
@@ -121,7 +119,7 @@ const syncRolesForGuild = async (
  * @returns The updated guild data.
  */
 export const updateGuildLastPrune = async (guildId: string, date: Date) => {
-	return await prisma.guild.upsert({
+	return prisma.guild.upsert({
 		where: {
 			id: guildId
 		},
@@ -132,5 +130,5 @@ export const updateGuildLastPrune = async (guildId: string, date: Date) => {
 			id: guildId,
 			lastPrune: date
 		}
-	})
+	});
 }
