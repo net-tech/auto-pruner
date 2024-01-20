@@ -1,6 +1,6 @@
 import { URL } from "node:url"
 import { API } from "@discordjs/core"
-import { REST } from "discord.js"
+import { REST } from "@discordjs/rest"
 import { loadCommands } from "./loaders.js"
 
 const commands = await loadCommands(new URL("../commands/", import.meta.url))

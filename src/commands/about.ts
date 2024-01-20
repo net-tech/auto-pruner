@@ -31,7 +31,11 @@ export default {
 						interaction.client.ws.ping
 					}ms\n**Last restart:** <t:${Math.round(
 						interaction.client.readyTimestamp / 1000
-					)}:R>`
+					)}:R>\n**Server count:** ${
+						interaction.client.guilds.cache.size
+					}\n**Memory Usage**: ${Math.round(
+						process.memoryUsage().heapUsed / 1024 / 1024
+					)} MB`
 				}
 			])
 			.setColor("#2C2D31")
@@ -55,7 +59,7 @@ export default {
 				.setStyle(ButtonStyle.Link)
 		)
 
-		interaction.reply({
+		await interaction.reply({
 			embeds: [info],
 			components: [row]
 		})

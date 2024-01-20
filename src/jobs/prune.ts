@@ -43,18 +43,23 @@ const pruneJob = async (client: Client) => {
 			}
 		}
 
-		const clientGuild = client.guilds.cache.get(guildSetting.id)
+		const clientGuild = await client.guilds.fetch(guildSetting.id)
 		if (!clientGuild) {
 			logger.warn(
-				`Skipping prune for guild ${guildSetting.id} because I am not in it.`
+				`Skipping prune for guild ${guildSetting.id} because I am not in it and deleting it from the database.`
 			)
+			await prisma.guild.delete({
+				where: {
+					id: guildSetting.id
+				}
+			})
 			continue
 		}
 
 		await clientGuild.members
 			.prune({
 				days: guildSetting.days,
-				count: clientGuild.memberCount > 10_000 ? false : true,
+				count: clientGuild.memberCount <= 10_000,
 				roles: guildSetting.roles.map((role) => role.id),
 				reason: "Scheduled guild prune"
 			})
@@ -104,7 +109,6 @@ const pruneJob = async (client: Client) => {
 						})
 					}
 				}
-				return
 			})
 	}
 	logger.info("[CRON] Prune job finished.")

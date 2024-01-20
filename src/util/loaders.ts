@@ -1,9 +1,9 @@
 import type { PathLike } from "node:fs"
 import { readdir, stat } from "node:fs/promises"
 import { URL } from "node:url"
-import type { Command } from "../commands/index.js"
+import type { Command } from "../commands"
 import { predicate as commandPredicate } from "../commands/index.js"
-import type { Event } from "../events/index.js"
+import type { Event } from "../events"
 import { predicate as eventPredicate } from "../events/index.js"
 import { logger } from "./logger.js"
 

@@ -77,7 +77,7 @@ export default {
 		if (roles) {
 			roles = parseRoles(roles)
 			if (!roles.reset && roles.roles.length === 0) {
-				interaction.editReply({
+				await interaction.editReply({
 					content:
 						"Please mention at least one role or type `reset` to reset the roles to be pruned."
 				})
@@ -93,7 +93,7 @@ export default {
 				)
 
 				if (invalidRoles.length > 0) {
-					interaction.editReply({
+					await interaction.editReply({
 						content: `The following roles are invalid and do not exist: ${invalidRoles
 							.map((role) => `<@&${role}>`)
 							.join(", ")}.`,
@@ -111,7 +111,7 @@ export default {
 				const missing = logChannelRequiredPermissions.filter(
 					(permission) => !permissions.has(permission)
 				)
-				interaction.editReply({
+				await interaction.editReply({
 					content: `I am missing the following permission(s) in that channel: ${new PermissionsBitField(
 						missing
 					)
@@ -124,27 +124,27 @@ export default {
 
 		if (interval) {
 			if (!interval.startsWith("every ")) {
-				interaction.editReply({
+				await interaction.editReply({
 					content: "The interval must start with `every`. E.g. `every 3 days`."
 				})
 				return
 			}
 			interval = new Date(parseInterval(interval))
 			if (!interval || Number.isNaN(interval.getTime())) {
-				interaction.editReply({
+				await interaction.editReply({
 					content:
 						"The interval must be a valid time interval. E.g. `every 3 days`."
 				})
 				return
 				// < 1 day
 			} else if (interval.getTime() < 86_400_000) {
-				interaction.editReply({
+				await interaction.editReply({
 					content: "The interval must be at least 1 day."
 				})
 				return
 				// >= 10 years
 			} else if (interval.getTime() >= 365 * 10 * 86_400_000) {
-				interaction.editReply({
+				await interaction.editReply({
 					content:
 						"Really? You want to prune every 10+ years? The interval must be less than 10 years."
 				})
@@ -175,7 +175,7 @@ export default {
 			.setTitle("Server Settings")
 			.setAuthor({
 				name: interaction.guild.name,
-				iconURL: interaction.guild.iconURL() || ""
+				iconURL: interaction.guild.iconURL() ?? ""
 			})
 			.setColor(colors.embed)
 

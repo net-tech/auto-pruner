@@ -1,7 +1,7 @@
 import { type Client, Events } from "discord.js"
 import { nanoid } from "nanoid"
-import type { Command } from "../commands/index.js"
-import type { Event } from "../events/index.js"
+import type { Command } from "../commands"
+import type { Event } from "../events"
 import { logger } from "./logger.js"
 
 export function registerEvents(
