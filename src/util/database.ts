@@ -21,7 +21,7 @@ export const getGuildData = async (guildId: string) => {
 		include: {
 			roles: true
 		}
-	});
+	})
 }
 
 /**
@@ -55,10 +55,10 @@ export const updateGuildSettings = async (
 	}
 
 	return prisma.guild.upsert({
-		where: {id: guildId},
+		where: { id: guildId },
 		update: upsertSettings,
-		create: {...upsertSettings}
-	});
+		create: { ...upsertSettings }
+	})
 }
 
 /**
@@ -68,8 +68,8 @@ export const updateGuildSettings = async (
  */
 const resetRolesForGuild = async (guildId: string) => {
 	return prisma.role.deleteMany({
-		where: {guild: {id: guildId}}
-	});
+		where: { guild: { id: guildId } }
+	})
 }
 
 /**
@@ -130,5 +130,5 @@ export const updateGuildLastPrune = async (guildId: string, date: Date) => {
 			id: guildId,
 			lastPrune: date
 		}
-	});
+	})
 }

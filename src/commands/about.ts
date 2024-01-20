@@ -33,7 +33,9 @@ export default {
 						interaction.client.readyTimestamp / 1000
 					)}:R>\n**Server count:** ${
 						interaction.client.guilds.cache.size
-					}\n**Memory Usage**: ${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`,
+					}\n**Memory Usage**: ${Math.round(
+						process.memoryUsage().heapUsed / 1024 / 1024
+					)} MB`
 				}
 			])
 			.setColor("#2C2D31")
