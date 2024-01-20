@@ -46,13 +46,8 @@ const pruneJob = async (client: Client) => {
 		const clientGuild = await client.guilds.fetch(guildSetting.id)
 		if (!clientGuild) {
 			logger.warn(
-				`Skipping prune for guild ${guildSetting.id} because I am not in it and deleting it from the database.`
+				`Skipping prune for guild ${guildSetting.id} because I am not in it.`
 			)
-			await prisma.guild.delete({
-				where: {
-					id: guildSetting.id
-				}
-			})
 			continue
 		}
 
