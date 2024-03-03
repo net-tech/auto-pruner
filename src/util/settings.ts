@@ -10,6 +10,7 @@ export const getSettingDescription = (
 	if (setting.channel) return value ? `<#${value}>` : null
 
 	if (setting.role) {
+		if (guildSettings.roles.length === 0) return "None"
 		return `\n${guildSettings.roles
 			.map((role) => {
 				// deepcode ignore PureMethodReturnValueIgnored:
@@ -23,14 +24,15 @@ export const getSettingDescription = (
 			? new Date(value.getTime() + guildSettings.lastPrune.getTime())
 			: undefined
 		const intervalHuman = guildSettings.intervalHuman
-		return `${intervalHuman}. ${
+		return `"${intervalHuman}" ${
 			nextPrune
-				? `Next prune is approximately <t:${Math.round(
+				? `.Next prune is approximately <t:${Math.round(
 						nextPrune.getTime() / 1000
 				  )}:R>`
 				: ""
 		}`
 	}
+
 	return value
 }
 
