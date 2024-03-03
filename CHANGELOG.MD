@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 3.0.0
+- BREAKING: Require the Manage Server permission to prune (https://github.com/discord/discord-api-docs/pull/6688).
+- Warn users when there are permissions the bot needs in the server that it does not have. The warning message is displayed in `/settings`.
+- Correctly determine the number of CRON jobs loaded.
+- Add a `.editorconfig` file.
+- Bump packages.
+- Other miscellaneous changes.
+
 ## Version 2.1.0
 - Bump dependencies
 - Show guild count and memory usage in /about
@@ -17,4 +25,4 @@
 - Support any number of days
 
 ## Versions <1.0.0
-Changelogs not available.
+Changelog not available.
