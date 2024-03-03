@@ -5,7 +5,7 @@ import {
 	EmbedBuilder,
 	OAuth2Scopes
 } from "discord.js"
-import { supportServerInviteLink } from "../util/misc.js"
+import { SUPPORT_SERVER_INVITE_LINK } from "../util/misc.js"
 import type { Command } from "./index.js"
 
 export default {
@@ -47,7 +47,7 @@ export default {
 				.setStyle(ButtonStyle.Link),
 			new ButtonBuilder()
 				.setLabel("Support Server")
-				.setURL(supportServerInviteLink)
+				.setURL(SUPPORT_SERVER_INVITE_LINK)
 				.setStyle(ButtonStyle.Link),
 			new ButtonBuilder()
 				.setLabel("Source Code")
