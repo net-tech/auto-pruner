@@ -6,10 +6,11 @@ import {
 } from "discord.js"
 import { getGuildData, updateGuildSettings } from "../util/database.js"
 import {
-	RolesStringParserReturn,
-	colors,
-	guildSettings,
-	logChannelRequiredPermissions
+	COLORS,
+	GUILD_REQUIRED_PERMISSIONS,
+	GUILD_SETTINGS,
+	LOG_CHANNEL_REQUIRED_PERMISSIONS,
+	RolesStringParserReturn
 } from "../util/misc.js"
 import { parseInterval } from "../util/parseInterval.js"
 import { getSettingDescription, parseRoles } from "../util/settings.js"
@@ -74,6 +75,8 @@ export default {
 
 		await interaction.deferReply()
 
+		const me = await interaction.guild.members.fetchMe()
+
 		if (roles) {
 			roles = parseRoles(roles)
 			if (!roles.reset && roles.roles.length === 0) {
@@ -105,16 +108,15 @@ export default {
 		}
 
 		if (channel) {
-			const me = await interaction.guild.members.fetchMe()
-			const permissions = channel.permissionsFor(me)
-			if (!permissions.has(logChannelRequiredPermissions)) {
-				const missing = logChannelRequiredPermissions.filter(
-					(permission) => !permissions.has(permission)
+			const channelPermissions = channel.permissionsFor(me)
+			if (!channelPermissions.has(LOG_CHANNEL_REQUIRED_PERMISSIONS)) {
+				const missing = LOG_CHANNEL_REQUIRED_PERMISSIONS.filter(
+					(permission) => !channelPermissions.has(permission)
 				)
 				await interaction.editReply({
-					content: `I am missing the following permission(s) in that channel: ${new PermissionsBitField(
-						missing
-					)
+					content: `I am missing the following permission${
+						missing.length === 1 ? "" : "s"
+					} in that channel: ${new PermissionsBitField(missing)
 						.toArray()
 						.join(", ")}.`
 				})
@@ -136,14 +138,18 @@ export default {
 						"The interval must be a valid time interval. E.g. `every 3 days`."
 				})
 				return
-				// < 1 day
-			} else if (interval.getTime() < 86_400_000) {
+			}
+
+			// < 1 day
+			if (interval.getTime() < 86_400_000) {
 				await interaction.editReply({
 					content: "The interval must be at least 1 day."
 				})
 				return
-				// >= 10 years
-			} else if (interval.getTime() >= 365 * 10 * 86_400_000) {
+			}
+
+			// >= 10 years
+			if (interval.getTime() >= 365 * 10 * 86_400_000) {
 				await interaction.editReply({
 					content:
 						"Really? You want to prune every 10+ years? The interval must be less than 10 years."
@@ -177,16 +183,33 @@ export default {
 				name: interaction.guild.name,
 				iconURL: interaction.guild.iconURL() ?? ""
 			})
-			.setColor(colors.embed)
+			.setColor(COLORS.embed)
 
 		// Process the settings and generate description
-		for (const setting of guildSettings) {
+		for (const setting of GUILD_SETTINGS) {
 			if (!settingsEmbed.data.description) settingsEmbed.data.description = ""
 			settingsEmbed.data.description += `**${
 				setting.name
 			}:** ${getSettingDescription(guildData, setting)}${
 				setting.name === "roles" ? "" : "\n"
 			}`
+		}
+
+		const guildPermissions = me.permissions
+		if (!guildPermissions.has(GUILD_REQUIRED_PERMISSIONS)) {
+			const missing = GUILD_REQUIRED_PERMISSIONS.filter(
+				(permission) => !guildPermissions.has(permission)
+			)
+
+			const descriptionSuffix = `:warning: I am missing the following permission${
+				missing.length === 1 ? "" : "s"
+			} in this server: ${new PermissionsBitField(missing)
+				.toArray()
+				.join(", ")}.`
+
+			settingsEmbed.setDescription(
+				`${settingsEmbed.data.description}\n${descriptionSuffix}`
+			)
 		}
 
 		settingsEmbed.data.description = settingsEmbed.data.description

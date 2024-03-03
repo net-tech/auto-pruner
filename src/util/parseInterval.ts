@@ -6,7 +6,6 @@ export const parseInterval = (interval: string) => {
 	interval = interval.replace("every ", "")
 	if (Number.isNaN(humanInterval(interval))) {
 		return ms(interval)
-	} else {
-		return humanInterval(interval) as number
 	}
+	return humanInterval(interval) as number
 }

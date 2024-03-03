@@ -1,7 +1,7 @@
-import { EmbedBuilder, type Guild, codeBlock } from "discord.js"
+import { EmbedBuilder, type Guild } from "discord.js"
 import { listAndTrimArray } from "./listAndTrimArray.js"
 import { logger } from "./logger.js"
-import { colors, supportServerInviteLink } from "./misc.js"
+import { COLORS, SUPPORT_SERVER_INVITE_LINK } from "./misc.js"
 import type { ScheduledPruneInfo } from "./misc.js"
 
 export const postPruneLogSuccessMessage = async (
@@ -49,7 +49,7 @@ export const postPruneLogSuccessMessage = async (
 				inline: true
 			}
 		)
-		.setColor(colors.embed)
+		.setColor(COLORS.embed)
 
 	await channel.send({ embeds: [logEmbed] }).catch((err) => {
 		logger.error(err, "Error sending prune log message")
@@ -59,7 +59,8 @@ export const postPruneLogSuccessMessage = async (
 export const postPruneLogErrorMessage = async (
 	guild: Guild,
 	logChannelId: string,
-	errorMessage: string
+	errorMessage: string,
+	showInCodeBlock = true
 ) => {
 	const channel = await guild.channels.fetch(logChannelId)
 	if (!channel)
@@ -76,12 +77,17 @@ export const postPruneLogErrorMessage = async (
 			iconURL: guild.iconURL() ?? undefined
 		})
 		.setTitle("Scheduled Prune Unsuccessful")
-		.setDescription(
-			`An error occurred while pruning the server. \n\n${codeBlock(
-				errorMessage
-			)}\n\n**Support Server:** ${supportServerInviteLink}`
+		.setColor(COLORS.red)
+
+	if (showInCodeBlock) {
+		logEmbed.setDescription(
+			`An error occurred while pruning the server. \n\n\`\`\`${errorMessage}\`\`\`\n\n**Support Server:** ${SUPPORT_SERVER_INVITE_LINK}`
 		)
-		.setColor(colors.red)
+	} else {
+		logEmbed.setDescription(
+			`An error occurred while pruning the server. \n\n${errorMessage}\n\n**Support Server:** ${SUPPORT_SERVER_INVITE_LINK}`
+		)
+	}
 
 	await channel.send({ embeds: [logEmbed] }).catch((err) => {
 		logger.error(err, "Error sending prune log message")

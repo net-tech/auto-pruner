@@ -1,5 +1,6 @@
 import { Cron } from "croner"
 import { type Client, DiscordAPIError } from "discord.js"
+import ms from "ms"
 import { prisma, updateGuildLastPrune } from "../util/database.js"
 import { logger } from "../util/logger.js"
 import {
@@ -9,18 +10,19 @@ import {
 
 const pruneJob = async (client: Client) => {
 	logger.info("[CRON] Starting prune job...")
+	const startDate = new Date()
 
 	const guilds = await prisma.guild.findMany({
 		where: {
 			enabled: true,
 			days: {
-				gte: 1,
-				lte: 30
+				gte: 1, // Greater than 1 day
+				lte: 30 // Less than 30 days
 			},
 			interval: {
 				not: null,
-				gte: new Date(86_400_000),
-				lt: new Date(365 * 10 * 86_400_000)
+				gte: new Date(86_400_000), // Greater than 1 day
+				lt: new Date(365 * 10 * 86_400_000) // Less than 10 years
 			}
 		},
 		include: {
@@ -36,7 +38,7 @@ const pruneJob = async (client: Client) => {
 				lastPrune.getTime() + guildSetting.interval?.getTime() >
 				Date.now() - 5000
 			) {
-				logger.info(
+				logger.debug(
 					`Skipping prune for guild ${guildSetting.id} because it was pruned recently.`
 				)
 				continue
@@ -58,7 +60,7 @@ const pruneJob = async (client: Client) => {
 				roles: guildSetting.roles.map((role) => role.id),
 				reason: "Scheduled guild prune"
 			})
-			.then((pruned: number | undefined | null) => {
+			.then((pruned?: number | null) => {
 				updateGuildLastPrune(guildSetting.id, new Date())
 
 				if (guildSetting.logChannelId) {
@@ -86,7 +88,8 @@ const pruneJob = async (client: Client) => {
 							postPruneLogErrorMessage(
 								clientGuild,
 								guildSetting.logChannelId,
-								"I do not have permission to prune members in this guild. Please check that I have the 'Kick Members' permission."
+								"I do not have permission to prune members in this server. Please check that I have the 'Kick Members' and 'Manage Server' permissions. Discord added the 'Manage Server' permission as a prune requirement on <t:1710529200:D>.",
+								false
 							)
 							return
 						}
@@ -106,12 +109,19 @@ const pruneJob = async (client: Client) => {
 				}
 			})
 	}
-	logger.info("[CRON] Prune job finished.")
+	logger.info(
+		`[CRON] Prune job finished. Took ${ms(
+			new Date().getTime() - startDate.getTime(),
+			{
+				long: true
+			}
+		)}.`
+	)
 }
 
 const startCron = (client: Client) => {
+	// Every 30 minutes
 	Cron("*/30 * * * *", async () => {
-		// Every 30 minutes
 		await pruneJob(client).catch((error) => {
 			logger.error(error)
 		})

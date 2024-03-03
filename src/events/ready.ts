@@ -21,7 +21,9 @@ export default {
 				startCron(client)
 				logger.info(`[CRON] Started CRON "${job}"`)
 			}
-			logger.info(`[CRON] Started ${jobs.length} CRONs.`)
+			logger.info(
+				`[CRON] Started ${jobs.filter((j) => j.endsWith(".ts")).length} CRONs.`
+			)
 		} catch (error) {
 			logger.warn(error, "[CRON] Failed to load CRONs.")
 		}
