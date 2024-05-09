@@ -1,1 +1,26 @@
-{ "enabled": false }
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		":assignAndReview(net-tech)",
+		":automergeMinor",
+		":automergeRequireAllStatusChecks",
+		":automergeTypes",
+		":combinePatchMinorReleases",
+		":disableDependencyDashboard",
+		":enableVulnerabilityAlerts",
+		":maintainLockFilesMonthly",
+		":prConcurrentLimit10",
+		":semanticCommits",
+		":separateMajorReleases",
+		"security:openssf-scorecard"
+	],
+	"automerge": true,
+	"automergeType": "pr",
+	"automergeStrategy": "auto",
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+			"automerge": true
+		}
+	]
+}
