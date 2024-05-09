@@ -1,5 +1,5 @@
-import { readdirSync } from "fs"
-import { join } from "path"
+import { readdirSync } from "node:fs"
+import { join } from "node:path"
 import { Events } from "discord.js"
 import { logger } from "../util/logger.js"
 import type { Event } from "./index.js"

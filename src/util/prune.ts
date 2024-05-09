@@ -39,7 +39,7 @@ export const postPruneLogSuccessMessage = async (
 					? listAndTrimArray(
 							prune.roles.map((r) => `<@&${r}>`),
 							10
-					  ).join(", ")
+						).join(", ")
 					: "None",
 				inline: true
 			},
