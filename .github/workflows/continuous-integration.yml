@@ -6,6 +6,7 @@ on:
     types: [ opened, synchronize ]
 jobs:
   build:
+    name: Build
     runs-on: macos-latest
     timeout-minutes: 15
     steps:
