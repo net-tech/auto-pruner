@@ -28,7 +28,7 @@ export const getSettingDescription = (
 			nextPrune
 				? `.Next prune is approximately <t:${Math.round(
 						nextPrune.getTime() / 1000
-				  )}:R>`
+					)}:R>`
 				: ""
 		}`
 	}

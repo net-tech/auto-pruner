@@ -1,6 +1,6 @@
 import {
 	ApplicationCommandOptionType,
-	ChatInputCommandInteraction,
+	type ChatInputCommandInteraction,
 	EmbedBuilder,
 	PermissionsBitField
 } from "discord.js"
@@ -10,7 +10,7 @@ import {
 	GUILD_REQUIRED_PERMISSIONS,
 	GUILD_SETTINGS,
 	LOG_CHANNEL_REQUIRED_PERMISSIONS,
-	RolesStringParserReturn
+	type RolesStringParserReturn
 } from "../util/misc.js"
 import { parseInterval } from "../util/parseInterval.js"
 import { getSettingDescription, parseRoles } from "../util/settings.js"
@@ -63,7 +63,14 @@ export default {
 	},
 
 	async execute(interaction: ChatInputCommandInteraction) {
-		if (!(interaction.guild && interaction.inCachedGuild())) return
+		if (!interaction.inCachedGuild()) {
+			await interaction.reply({
+				content:
+					"Something went wrong while executing that command. If this keeps happening please report it on support server (run /about for the link to it).",
+				ephemeral: true
+			})
+			return
+		}
 
 		const enabled = interaction.options.getBoolean("enabled")
 		let interval: string | Date | null =
@@ -166,13 +173,12 @@ export default {
 			days: days ?? undefined,
 			roles: roles as RolesStringParserReturn | undefined,
 			logChannelId: channel?.id
-		}).catch((err) => {
-			interaction.editReply({
+		}).catch(async (err) => {
+			await interaction.editReply({
 				content: `An error occurred while updating the guild settings. ${
 					err.message ? `\n\n${err.message}` : ""
-				}`
+				} If this keeps happening please report it on support server (run /about for the link to it).`
 			})
-			return
 		})
 
 		const guildData = await getGuildData(interaction.guild.id)
@@ -217,6 +223,6 @@ export default {
 			.replaceAll("true", "✅")
 			.replaceAll("false", "❌")
 
-		return void interaction.editReply({ embeds: [settingsEmbed] })
+		await interaction.editReply({ embeds: [settingsEmbed] })
 	}
 } satisfies Command
