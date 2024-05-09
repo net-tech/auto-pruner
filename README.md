@@ -1,5 +1,4 @@
 # AutoPruner
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnet-tech%2Fauto-pruner.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnet-tech%2Fauto-pruner?ref=badge_shield)
 
 AutoPruner is a simple Discord bot that allows you to prune members on a customizable interval. A hosted version of AutoPruner can be invited [here](https://discord.com/api/oauth2/authorize?client_id=1049762823997231134&permissions=274878286850&scope=applications.commands%20bot). The support server is located [here](https://discord.com/invite/wAhhesqCAH).
 
@@ -24,4 +23,4 @@ bun run start
 
 
 ## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnet-tech%2Fauto-pruner.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnet-tech%2Fauto-pruner?ref=badge_large)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
