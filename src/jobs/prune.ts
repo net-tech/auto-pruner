@@ -85,9 +85,6 @@ const pruneJob = async (client: Client) => {
 				Date.now() - 5000
 			) {
 				skipped++
-				logger.debug(
-					`Skipping prune for guild ${guildSetting.id} because it was pruned recently.`
-				)
 				continue
 			}
 		}

@@ -27,7 +27,7 @@ export default {
 		const info = new TextDisplayBuilder().setContent(
 			[
 				"## About AutoPruner",
-				"AutoPruner automatically prunes members on a customizable interval. AutoPruner is written in TypeScript and uses the Discord.js library. It runs using Bun.",
+				"AutoPruner automatically prunes members on a customizable interval.",
 				"",
 				"## Statistics",
 				`**Ping:** ${interaction.client.ws.ping}ms`,

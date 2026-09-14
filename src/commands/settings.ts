@@ -22,7 +22,7 @@ export default {
 	data: {
 		name: "settings",
 		description:
-			"Configure AutoPruner. Provide no arguments to see the current settings.",
+			"Configure AutoPruner. Provide no input to see the current settings.",
 		dm_permission: false,
 		default_member_permissions:
 			PermissionsBitField.Flags.ManageGuild.toString(),
@@ -133,7 +133,7 @@ export default {
 		if (intervalHuman) {
 			if (!intervalHuman.startsWith("every ")) {
 				await interaction.editReply({
-					content: "The interval must start with `every`. E.g. `every 3 days`."
+					content: "The interval must start with `every`. E.g., `every 3 days`."
 				})
 				return
 			}
@@ -142,7 +142,7 @@ export default {
 			if (parsed === undefined || Number.isNaN(parsed)) {
 				await interaction.editReply({
 					content:
-						"The interval must be a valid time interval. E.g. `every 3 days`."
+						"The interval must be a valid time interval. E.g., `every 3 days`."
 				})
 				return
 			}
@@ -159,7 +159,7 @@ export default {
 			if (parsed >= 365 * 10 * 86_400_000) {
 				await interaction.editReply({
 					content:
-						"Really? You want to prune every 10+ years? The interval must be less than 10 years."
+						"The interval must be less than 10 years."
 				})
 				return
 			}
