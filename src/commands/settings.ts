@@ -158,8 +158,7 @@ export default {
 			// >= 10 years
 			if (parsed >= 365 * 10 * 86_400_000) {
 				await interaction.editReply({
-					content:
-						"The interval must be less than 10 years."
+					content: "The interval must be less than 10 years."
 				})
 				return
 			}
